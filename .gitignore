@@ -9,4 +9,5 @@ db/db_login/credentials/key.key
 
 db/__pycache__/
 db/db_login/__pycache__/
-
+priv_coll/main/__pycache__/
+priv_coll/priv_coll/__pycache__/
