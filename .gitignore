@@ -1,2 +1,8 @@
 .idea/
 notes.txt
+.env
+test_things.py
+
+db/db_login/admin
+db/db_login/user
+db/db_login/key.key
