@@ -1,7 +1,7 @@
 .idea/
 notes.txt
 .env
-test_things.py
+simple_tester.py
 
 db/db_login/credentials/admin
 db/db_login/credentials/user
