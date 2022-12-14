@@ -3,6 +3,10 @@ notes.txt
 .env
 test_things.py
 
-db/db_login/admin
-db/db_login/user
-db/db_login/key.key
+db/db_login/credentials/admin
+db/db_login/credentials/user
+db/db_login/credentials/key.key
+
+db/__pycache__/
+db/db_login/__pycache__/
+

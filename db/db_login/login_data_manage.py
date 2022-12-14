@@ -3,6 +3,11 @@ import pickle
 from cryptography.fernet import Fernet
 from decouple import config
 
+ADMIN_FILE = "db/db_login/credentials/admin"
+USER_FILE = "db/db_login/credentials/user"
+KEY_FILE = "db/db_login/credentials/key.key"
+
+
 def write_key(key_file):
     key = Fernet.generate_key()
     with open(key_file, "wb") as kf:
@@ -32,7 +37,7 @@ def import_login_data(file, key_file):
     return login_data
 
 
-def init_login_info(admin_file="db/db_login/admin", user_file="db/db_login/user", key_file="db/db_login/key.key"):
+def init_login_info(admin_file=ADMIN_FILE, user_file=USER_FILE, key_file=KEY_FILE):
     if config('radek'):
         base_login = {
             'user': None,
@@ -62,11 +67,11 @@ def init_login_info(admin_file="db/db_login/admin", user_file="db/db_login/user"
         return False
 
 
-def get_user(user_file="db/db_login/user", key_file="db/db_login/key.key"):
+def get_user(user_file=USER_FILE, key_file=KEY_FILE):
     user_data = import_login_data(user_file, key_file)
     return user_data
 
 
-def get_admin(admin_file="db/db_login/admin", key_file="db/db_login/key.key"):
+def get_admin(admin_file=ADMIN_FILE, key_file=KEY_FILE):
     admin_data = import_login_data(admin_file, key_file)
     return admin_data
