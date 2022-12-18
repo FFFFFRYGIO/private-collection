@@ -11,7 +11,7 @@ log = logging.getLogger(__name__)
 
 
 def db_create():
-    if not path.isfile('db_login/credentials/key.key'):
+    if not path.isfile('../db_login/credentials/key.key'):
         if not init_login_info():
             log.exception('No key file!')
     admin_login_data = get_admin()
