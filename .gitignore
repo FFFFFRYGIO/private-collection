@@ -3,12 +3,6 @@ notes.txt
 .env
 simple_tester.py
 
-db/db_login/credentials/admin
-db/db_login/credentials/user
-db/db_login/credentials/key.key
-
-db/__pycache__/
-db/db_login/__pycache__/
-db/db_create/__pycache__/
 priv_coll/main/__pycache__/
 priv_coll/priv_coll/__pycache__/
+priv_coll/main/migrations/__pycache__/
