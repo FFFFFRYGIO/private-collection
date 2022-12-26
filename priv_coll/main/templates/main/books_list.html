@@ -2,4 +2,63 @@
 {% block title %}Add books{% endblock %}
 {% block content %}
     <h1>Here you can see information about all books</h1>
+    <div class="container-fluid">
+    {% if books_list %}
+        <table class="table">
+            <thead>
+            <tr>
+                {% for attr in attributes_keys %}
+                    <th scope="col">{{ attr }}</th>
+                {% endfor %}
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for book in books_list %}
+                    <tr>
+                    <th scope="row">{{ book.ISBN }}</th>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.authors }}</td>
+                    <td>
+                        {% if book.publishedDate %}
+                        {{ book.publishedDate }}
+                        {% else %}
+                        empty
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if book.pageCount %}
+                        {{ book.pageCount }}
+                        {% else %}
+                        empty
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ book.thumbnail }}<br>
+                        {% if book.thumbnail != '<no thumbnail>' %}
+                            <img src="{{ book.thumbnail }}" alt="<wrong thumbnail url>">
+                        {% endif %}
+                    </td>
+                    <td>{{ book.language }}</td>
+                    <td>
+                        <form action="#" method="post">
+                            {% csrf_token %}
+                            <button type="submit" value="E{{ book.ISBN }}" name="operation">edit</button><br>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="#" method="post">
+                            {% csrf_token %}
+                            <button type="submit" value="D{{ book.ISBN }}" name="operation">Delete</button><br>
+                        </form>
+                    </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>(no books so far)</p>
+    {% endif %}
+    </div>
 {% endblock %}
