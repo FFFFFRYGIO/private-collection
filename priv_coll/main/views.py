@@ -1,20 +1,19 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
 # Create your views here.
 
 
-def index(response):
-    return HttpResponse("<h1>tech with tim!</h>")
+def home(response):
+    return render(response, 'main/home.html', {})
 
 
 def books_list(response):
-    return HttpResponse("<h1>books_list</h>")
+    return render(response, 'main/books_list.html', {})
 
 
 def add_books(response):
-    return HttpResponse("<h1>add_books</h>")
+    return render(response, 'main/add_books.html', {})
 
 
-def edit_books(response):
-    return HttpResponse("<h1>edit_books</h>")
+def edit_book(response):
+    return render(response, 'main/edit_book.html', {})
