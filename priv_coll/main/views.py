@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from .forms import AddBooks
 # Create your views here.
 
 
@@ -12,7 +12,7 @@ def books_list(response):
 
 
 def add_books(response):
-    return render(response, 'main/add_books.html', {})
+    return render(response, 'main/add_books.html', {'form': AddBooks()})
 
 
 def edit_book(response):

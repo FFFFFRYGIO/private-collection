@@ -2,4 +2,9 @@
 {% block title %}Add books{% endblock %}
 {% block content %}
     <h1>This is a page where you can add some books.</h1>
+    <form action="#" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" id="submit" value="submit">Add those books</button>
+    </form>
 {% endblock %}
