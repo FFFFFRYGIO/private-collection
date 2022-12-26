@@ -1,4 +1,5 @@
 from requests import get
+from django.contrib import messages
 
 
 def generate_query(book_params):
@@ -17,7 +18,7 @@ def generate_query(book_params):
 
 def get_api_request(book_params):
     if not len(book_params):
-        flash('No parameters to add books')
+        # messages.add_message('No parameters to add books')
         return -1
 
     url = r'https://www.googleapis.com/books/v1/volumes'

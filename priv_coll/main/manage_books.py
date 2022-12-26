@@ -2,8 +2,8 @@ from flask import flash
 from sqlalchemy import update, delete
 from collections import namedtuple
 
-from api_connection.api_request import get_api_request
-from priv_coll.main.models import Book
+from .api_request import get_api_request
+from .models import Book
 
 
 def add_books(book_params):
@@ -26,6 +26,9 @@ def add_books(book_params):
                 curr_book.ISBN = isbn_elem.get('identifier')
         if curr_book.ISBN is None:  # No ISBN code
             count_errors += 1
+            continue
+        if Book.objects.filter(ISBN=curr_book.ISBN):  # ISBN already on the list
+            count_duplicates += 1
             continue
 
         try:
@@ -63,15 +66,8 @@ def add_books(book_params):
         except TypeError:
             curr_book.language = '<no lan.>'
 
-        Book.objects.
-        if len(query):
-            count_duplicates += 1
-        else:
-            session.add(curr_book)
-            session.commit()
-            count_success += 1
+        curr_book.save()
 
-    # print('Books inserted')
     return namedtuple('Result', ['errors', 'duplicates', 'success'])(count_errors, count_duplicates, count_success)
 
 

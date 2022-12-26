@@ -11,7 +11,7 @@ class Book(models.Model):
     pageCount = models.IntegerField(null=True, default=None, blank=True)
     thumbnail = models.CharField(max_length=200, null=True, default=None, blank=True)
     language = models.CharField(max_length=10, null=True, default=None, blank=True)
-    slug = models.SlugField(max_length=4, unique=True)
+
     class Meta:
         indexes = [
             models.Index(fields=['ISBN'])
