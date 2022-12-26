@@ -20,8 +20,11 @@ def add_books(book_params):
         curr_book = Book()
 
         # ISBN_13
-        isbn_pocket = vol.get('industryIdentifiers')
-        for isbn_elem in isbn_pocket:
+
+        if not vol.get('industryIdentifiers'):  # No any ISBN identification
+            count_errors += 1
+            continue
+        for isbn_elem in vol.get('industryIdentifiers'):
             if isbn_elem.get('type') == 'ISBN_13':
                 curr_book.ISBN = isbn_elem.get('identifier')
         if curr_book.ISBN is None:  # No ISBN code
