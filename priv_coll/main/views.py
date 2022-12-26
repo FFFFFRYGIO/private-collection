@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.contrib import messages
+from django.shortcuts import render, redirect
 from .models import Book
 from .forms import AddBooks
 from . import manage_books
@@ -14,13 +13,19 @@ def home(response):
 
 
 def books_list(response):
-    if response.method == 'POST':
-        # tutaj zrob poprawnie operacje edycji i usuwania
-        # nalezy zmienic to jak to jest aktualnie robione
-        # byc moze warto zapytać Marcela jak to powinno być
-        pass
+    if response.method == 'POST' and response.POST.get("operation"):
+        operation = response.POST.get("operation")[0]
+        book_isbn = response.POST.get("operation")[1:]
+        if operation == 'E':  # Edit
+            book = Book.objects.get(ISBN=book_isbn)
+            return render(response, 'main/edit_book.html', {'book': book})
+        elif operation == 'D':  # Delete
+            Book.objects.filter(ISBN=book_isbn).delete()
+            return render(response, 'main/books_list.html', {
+                'books_list': Book.objects.all(), 'attributes_keys': attributes_keys})
     else:
-        return render(response, 'main/books_list.html', {'books_list': Book.objects.all(), 'attributes_keys': attributes_keys})
+        return render(response, 'main/books_list.html', {
+            'books_list': Book.objects.all(), 'attributes_keys': attributes_keys})
 
 
 def add_books(response):
@@ -44,7 +49,8 @@ def add_books(response):
             if result.duplicates:
                 pass
                 # messages.add_message('Errors with duplicated books: ' + str(result.duplicates))
-            return render(response, 'main/books_list.html', {})
+            books_list = Book.objects.all()
+            return redirect('books_list')
     else:
         return render(response, 'main/add_books.html', {'form': AddBooks()})
 
