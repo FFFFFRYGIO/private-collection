@@ -3,9 +3,7 @@ from sqlalchemy import update, delete
 from collections import namedtuple
 
 from api_connection.api_request import get_api_request
-from db.db_connect import session
-from db.db_create.db_create_tables import Book
-from db.db_create.db_create_tables import book_attributes
+from priv_coll.main.models import Book
 
 
 def add_books(book_params):
@@ -65,7 +63,7 @@ def add_books(book_params):
         except TypeError:
             curr_book.language = '<no lan.>'
 
-        query = session.query(Book.ISBN).filter(Book.ISBN == curr_book.ISBN).all()
+        Book.objects.
         if len(query):
             count_duplicates += 1
         else:
