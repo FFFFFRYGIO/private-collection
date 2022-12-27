@@ -7,5 +7,5 @@ priv_coll/main/__pycache__/
 priv_coll/priv_coll/__pycache__/
 priv_coll/main/migrations/__pycache__/
 
-register/__pycache__/
-register/migrations/__pycache__/
+priv_coll/register/__pycache__/
+priv_coll/register/migrations/__pycache__/
