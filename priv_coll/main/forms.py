@@ -9,3 +9,13 @@ class AddBooks(forms.Form):
     isbn = forms.CharField(label='Exact ISBN number', max_length=200, required=False)
     lccn = forms.CharField(label='In the Library of Congress Control Number', max_length=200, required=False)
     oclc = forms.CharField(label='In the Online Computer Library Center number', max_length=200, required=False)
+
+
+class AddNewBook(forms.Form):
+    ISBN = forms.CharField(label='ISBN', max_length=50, required=True)
+    title = forms.CharField(label='title', max_length=270, required=True)
+    authors = forms.CharField(label='authors', max_length=110, required=True)
+    publishedDate = forms.CharField(label='publishedDate', max_length=10, required=False)
+    pageCount = forms.CharField(label='pageCount', required=False)
+    thumbnail = forms.CharField(label='thumbnail', max_length=200, required=False)
+    language = forms.CharField(label='language', max_length=10, required=False)
