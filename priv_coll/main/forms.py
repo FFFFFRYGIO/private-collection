@@ -16,6 +16,6 @@ class AddNewBook(forms.Form):
     title = forms.CharField(label='title', max_length=270, required=True)
     authors = forms.CharField(label='authors', max_length=110, required=True)
     publishedDate = forms.CharField(label='publishedDate', max_length=10, required=False)
-    pageCount = forms.CharField(label='pageCount', required=False)
+    pageCount = forms.IntegerField(label='pageCount', required=False)
     thumbnail = forms.CharField(label='thumbnail', max_length=200, required=False)
     language = forms.CharField(label='language', max_length=10, required=False)
