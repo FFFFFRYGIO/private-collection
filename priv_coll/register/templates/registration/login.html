@@ -1,0 +1,14 @@
+{%  extends 'loginbase.html' %}
+{% block title %}Logging{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h1>Welcome to register page!</h1>
+    <form method="post" class="form-group">
+    {% csrf_token %}
+        {{ form|crispy }}
+    <buttton type="submit", class="btn btn-success">Login</buttton>
+    <br><br>
+    <h5>Create an account <a href="/register">HERE</a></h5>
+    </form>
+{% endblock %}
