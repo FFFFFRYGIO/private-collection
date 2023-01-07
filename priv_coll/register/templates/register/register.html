@@ -4,7 +4,7 @@
 
 {% block content %}
     <h1>Welcome to register page!</h1>
-    <form method="post" class="form-group">
+    <form action="#" method="post" class="form-group">
     {% csrf_token %}
         {{ form|crispy }}
     <buttton type="submit", class="btn btn-success">Register</buttton>

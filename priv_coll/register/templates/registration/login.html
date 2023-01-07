@@ -3,11 +3,11 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <h1>Welcome to register page!</h1>
-    <form method="post" class="form-group">
+    <h1>Welcome to login page!</h1>
+    <form action="/login" method="post" class="form-group">
     {% csrf_token %}
         {{ form|crispy }}
-    <buttton type="submit", class="btn btn-success">Login</buttton>
+    <buttton type="submit" class="btn btn-success">Login</buttton>
     <br><br>
     <h5>Create an account <a href="/register">HERE</a></h5>
     </form>
