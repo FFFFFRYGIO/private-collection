@@ -9,5 +9,5 @@ urlpatterns = [
     path("edit_book/", views.edit_book, name="edit_book"),
     path("new_book/", views.new_book, name="new_book"),
     path("register/", register, name="register"),
-    path("", include('django.contrib.auth.urls')),
+    path("", include("django.contrib.auth.urls")),
 ]

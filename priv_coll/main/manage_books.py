@@ -1,12 +1,12 @@
-from sqlalchemy import update, delete
 from collections import namedtuple
-
 from .api_request import get_api_request
 from .models import Book
 from openpyxl import load_workbook
 
 
-def import_books_from_file(user, file="main/source/source.xlsx"):
+def import_books_from_file(user: str, file: str = "main/source/source.xlsx") -> str:
+    """add books stored in xls file"""
+
     count_success = 0
     wb = load_workbook(file)
     ws = wb.active
@@ -27,12 +27,14 @@ def import_books_from_file(user, file="main/source/source.xlsx"):
             b.save()
             count_success += 1
         row = str(int(row) + 1)
-    return f'successfully added {count_success} books'
+    return f"successfully added {count_success} books"
 
 
-def add_books(book_params, user):
+def add_books(book_params: dict, user: str) -> namedtuple:
+    """add books based on response from api"""
+
     response_dict = get_api_request(book_params)
-    if response_dict == -1:
+    if response_dict == {"error": -1}:
         return namedtuple("Result", ["errors", "duplicates", "success"])(-1, -1, -1)
 
     count_errors = 0
@@ -45,7 +47,7 @@ def add_books(book_params, user):
         curr_book.user = user
 
         # ISBN_13
-        if not vol.get("industryIdentifiers"):  # No any ISBN identification
+        if not vol.get("industryIdentifiers"):  # No ISBN identification
             count_errors += 1
             continue
         for isbn_elem in vol.get("industryIdentifiers"):
@@ -65,7 +67,7 @@ def add_books(book_params, user):
             if vol.get("authors") == 1:
                 curr_book.authors = vol.get("authors")[0]
             else:
-                curr_book.authors = ' '.join(vol.get("authors"))
+                curr_book.authors = " ".join(vol.get("authors"))
 
         curr_book.publishedDate = vol.get("publishedDate", None)
         curr_book.pageCount = vol.get("pageCount", None)
@@ -73,7 +75,7 @@ def add_books(book_params, user):
         curr_book.language = vol.get("language", None)
 
         if info.get("saleInfo").get("saleability") == "FOR_SALE":
-            curr_book.cost = info.get("saleInfo").get("listPrice").get('amount')
+            curr_book.cost = info.get("saleInfo").get("listPrice").get("amount")
         else:
             curr_book.cost = None
 
@@ -82,13 +84,17 @@ def add_books(book_params, user):
     return namedtuple("Result", ["errors", "duplicates", "success"])(count_errors, count_duplicates, count_success)
 
 
-def edit_book(book_target_isbn, user, updated_book):
+def edit_book(book_target_isbn: int, user: str, updated_book: dict) -> str:
+    """execute changes for modified book"""
+
     b = Book.objects.get(ISBN=book_target_isbn, user=user)
-    b.title = updated_book['title']
-    b.authors = updated_book['authors']
-    b.publishedDate = updated_book['publishedDate']
-    b.pageCount = updated_book['pageCount']
-    b.thumbnail = updated_book['thumbnail']
-    b.language = updated_book['language']
-    b.cost = updated_book['cost']
+    b.title = updated_book["title"]
+    b.authors = updated_book["authors"]
+    b.publishedDate = updated_book["publishedDate"]
+    b.pageCount = updated_book["pageCount"]
+    b.thumbnail = updated_book["thumbnail"]
+    b.language = updated_book["language"]
+    b.cost = updated_book["cost"]
     b.save()
+
+    return "succesfully edited book"

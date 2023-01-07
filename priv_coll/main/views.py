@@ -13,6 +13,8 @@ attributes_keys = ["ISBN", "Title", "Authors", "Published Date", "Page Count", "
 
 
 def home(response):
+    """summarization of library, button to remove all books"""
+
     if not response.user.is_authenticated:
         return render(response, "main/home.html", {})
     if response.method == "POST":
@@ -30,13 +32,20 @@ def home(response):
     return render(
         response,
         "main/home.html",
-        {"book_count": book_count, "book_cost": book_cost, 'book_without_cost': book_without_cost, 'reading_stats': reading_stats},
+        {
+            "book_count": book_count,
+            "book_cost": book_cost,
+            "book_without_cost": book_without_cost,
+            "reading_stats": reading_stats,
+        },
     )
 
 
 def new_book(response):
+    """form to add fully custom books"""
+
     if not response.user.is_authenticated:
-        return redirect('home')
+        return redirect("home")
     messages = []
     if response.method == "POST":
         form = AddNewBook(response.POST)
@@ -64,35 +73,41 @@ def new_book(response):
 
 
 def edit_book(response):
+    """form to edit book chosen from list"""
+
     messages = []
     if not response.user.is_authenticated:
-        return redirect('home')
+        return redirect("home")
     if response.method == "POST":
         form = EditBook(response.POST)
         if form.is_valid():
-            result = manage_books.edit_book('9788301180638', response.user, form.cleaned_data)  # TODO: dynamic ISBN
+            result = manage_books.edit_book(9788301180638, response.user, form.cleaned_data)  # TODO: dynamic ISBN
             messages.append(result)
         else:
-            messages.append('Form is not valid!')
-        return redirect('books_list')
-        return redirect('books_list', messages_parsed=messages)  # TODO: make it work
+            messages.append("Form is not valid!")
+        return redirect("books_list")
+        return redirect("books_list", messages_parsed=messages)  # TODO: make it work
     else:
-        b = Book.objects.get(ISBN='9788301180638', user=response.user)  # TODO: dynamic ISBN
+        b = Book.objects.get(ISBN="9788301180638", user=response.user)  # TODO: dynamic ISBN
         default_data = {
-            'title': b.title,
-            'authors': b.authors,
-            'publishedDate': b.publishedDate,
-            'pageCount': b.pageCount,
-            'thumbnail': b.thumbnail,
-            'language': b.language,
-            'cost': b.cost,
+            "title": b.title,
+            "authors": b.authors,
+            "publishedDate": b.publishedDate,
+            "pageCount": b.pageCount,
+            "thumbnail": b.thumbnail,
+            "language": b.language,
+            "cost": b.cost,
         }
-        return render(response, "main/edit_book.html", {"form": EditBook(default_data), 'book_isbn': b.ISBN, 'messages': messages})
+        return render(
+            response, "main/edit_book.html", {"form": EditBook(default_data), "book_isbn": b.ISBN, "messages": messages}
+        )
 
 
 def books_list(response, messages_parsed=None):
+    """all books user added, change to edit or delete them"""
+
     if not response.user.is_authenticated:
-        return redirect('home')
+        return redirect("home")
     messages = []
     if messages_parsed:
         messages += messages_parsed
@@ -106,7 +121,7 @@ def books_list(response, messages_parsed=None):
         elif operation == "D":  # Delete
             Book.objects.filter(ISBN=book_isbn, user=response.user).delete()
             messages.append("Book successfully deleted!")
-    books = Book.objects.filter(user=response.user).order_by('ISBN')
+    books = Book.objects.filter(user=response.user).order_by("ISBN")
     return render(
         response,
         "main/books_list.html",
@@ -115,8 +130,10 @@ def books_list(response, messages_parsed=None):
 
 
 def add_books(response):
+    """add book by keywords from api or from a file"""
+
     if not response.user.is_authenticated:
-        return redirect('home')
+        return redirect("home")
     messages = []
     if response.method == "POST":
         if response.POST.get("submit") == "by_keys":
@@ -138,6 +155,6 @@ def add_books(response):
         elif response.POST.get("submit") == "by_file":
             result = manage_books.import_books_from_file(user=response.user)
             messages.append(result)
-            return redirect('books_list')
+            return redirect("books_list")
             return redirect("books_list", messages_parsed=messages)  # TODO: make it work
     return render(response, "main/add_books.html", {"form": AddBooks(), "messages": messages})

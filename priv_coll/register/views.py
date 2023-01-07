@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 def register(response):
+    """parse and handle registration form"""
     messages = []
     if response.method == "POST":
         form = UserCreationForm(response.POST)
