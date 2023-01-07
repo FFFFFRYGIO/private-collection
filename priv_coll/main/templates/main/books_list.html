@@ -22,26 +22,41 @@
                     <td>{{ book.authors }}</td>
                     <td>
                         {% if book.publishedDate %}
-                        {{ book.publishedDate }}
+                            {{ book.publishedDate }}
                         {% else %}
-                        empty
+                            (unknown)
                         {% endif %}
                     </td>
                     <td>
-                        {% if book.pageCount %}
-                        {{ book.pageCount }}
+                        {% if book.pageCount is not None %}
+                            {{ book.pageCount }}
                         {% else %}
-                        empty
+                            (unknown)
                         {% endif %}
                     </td>
                     <td>
-                        {{ book.thumbnail }}<br>
-                        {% if book.thumbnail != '<no thumbnail>' %}
+                        {% if book.thumbnail %}
+                            {{ book.thumbnail }}<br>
                             <img src="{{ book.thumbnail }}" alt="<wrong thumbnail url>">
+                        {% else %}
+                            (unknown)
                         {% endif %}
                     </td>
-                    <td>{{ book.language }}</td>
                     <td>
+                        {% if book.language %}
+                            {{ book.language }}
+                        {% else %}
+                            (unknown)
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if book.cost is not None %}
+                            {{ book.cost }} PLN
+                        {% else %}
+                            (not available)
+                        {% endif %}
+                    </td>
+                        <td>
                         <form action="#" method="post">
                             {% csrf_token %}
                             <button type="submit" value="E{{ book.ISBN }}" name="operation">edit</button><br>

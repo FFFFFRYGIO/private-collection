@@ -1,5 +1,40 @@
 {%  extends 'main/base.html' %}
 {% block title %}Home Page{% endblock %}
 {% block content %}
-    <h1>Welcome to home page!</h1>
+    <h1>Welcome to home page {{ user }}!</h1>
+    <h4>You library have {{ book_count }} books</h4>
+    {% if book_count %}
+        <h4>Your books total cost is {{ book_cost }} PLN ({{ book_without_cost }} books have empty cost)</h4>
+
+        <h4>Statistical Pole would read them in about:</h4>
+        <ul>
+            {% if reading_stats.days == 1 %}
+                <li><h5>{{ reading_stats.days }} Day</h5></li>
+            {% elif reading_stats.days %}
+                <li><h5>{{ reading_stats.days }} Days</h5></li>
+            {% else %}
+                <li><h5>Less than day</h5></li>
+            {% endif %}
+
+            {% if reading_stats.months == 1 %}
+                <li><h5>{{ reading_stats.months }} Month</h5></li>
+            {% elif reading_stats.months %}
+                <li><h5>{{ reading_stats.months }} Months</h5></li>
+            {% else %}
+                <li><h5>Less than month</h5></li>
+            {% endif %}
+
+            {% if reading_stats.years == 1 %}
+                <li><h5>{{ reading_stats.years }} Year</h5></li>
+            {% elif reading_stats.years %}
+                <li><h5>{{ reading_stats.years }} Years</h5></li>
+            {% else %}
+                <li><h5>Less than year</h5></li>
+            {% endif %}
+        </ul>
+        <form action="#" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger" onclick="return confirm('You are about to delete all books from Your library\nAre You sure?')">Delete all books</button><br>
+        </form>
+    {% endif %}
 {% endblock %}

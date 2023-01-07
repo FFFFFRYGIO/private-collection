@@ -4,10 +4,10 @@
 
 {% block content %}
     <h1>Welcome to login page!</h1>
-    <form action="/login" method="post" class="form-group">
+    <form action="" method="post" class="form-group" id = "form1">
     {% csrf_token %}
         {{ form|crispy }}
-    <buttton type="submit" class="btn btn-success">Login</buttton>
+        <button type="submit" form="form1" class="btn btn-success">Login</button>
     <br><br>
     <h5>Create an account <a href="/register">HERE</a></h5>
     </form>

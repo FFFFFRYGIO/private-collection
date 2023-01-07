@@ -5,6 +5,7 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>{{ user }} {% block title %}{% endblock %}</title>
     {% block jsscript %}{% endblock %}
+    {% block styling %}{% endblock %}
 </head>
 <body>
 
@@ -28,14 +29,6 @@
                         class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="http://127.0.0.1:8000/register">Register<span
-                        class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="http://127.0.0.1:8000/login">Login<span
-                        class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item active">
                 <a class="nav-link" href="http://127.0.0.1:8000/logout">Logout<span
                         class="sr-only">(current)</span></a>
             </li>
@@ -47,16 +40,18 @@
     {% if messages %}
         {% for message in messages %}
             <div class="alert alert-warning alert-dismissible" role="alert">
-            <span type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                    aria-hidden="true">&times;</span></span>
                 {{ message }}
             </div>
         {% endfor %}
     {% endif %}
 </div>
 <div class="container-fluid">
-    {% block content %}
-    {% endblock %}
+    {% if user.is_authenticated %}
+        {% block content %}
+        {% endblock %}
+    {% else %}
+        <p>User not authenticated, login <a href="/login">HERE</a></p>
+    {% endif %}
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

@@ -15,11 +15,15 @@
                 <a class="nav-link" href="http://127.0.0.1:8000/">Home<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="http://127.0.0.1:8000/books_list">Books list<span
+                <a class="nav-link" href="http://127.0.0.1:8000/register">Register<span
                         class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="http://127.0.0.1:8000/add_books">Add books<span
+                <a class="nav-link" href="http://127.0.0.1:8000/login">Login<span
+                        class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="http://127.0.0.1:8000/logout">Logout<span
                         class="sr-only">(current)</span></a>
             </li>
         </ul>
@@ -30,8 +34,6 @@
     {% if messages %}
         {% for message in messages %}
             <div class="alert alert-warning alert-dismissible" role="alert">
-            <span type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                    aria-hidden="true">&times;</span></span>
                 {{ message }}
             </div>
         {% endfor %}

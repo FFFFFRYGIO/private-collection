@@ -1,5 +1,10 @@
 {%  extends 'main/base.html' %}
 {% block title %}Add books{% endblock %}
 {% block content %}
-    <h1>This is a page where you can edit book info (change values)</h1>
+    <h1>Editting book with ISBN {{ book_isbn }}</h1>
+    <form action="#" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" id="submit" value="submit">Edit book</button>
+    </form>
 {% endblock %}

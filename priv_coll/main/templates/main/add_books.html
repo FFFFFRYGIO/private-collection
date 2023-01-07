@@ -1,10 +1,35 @@
 {%  extends 'main/base.html' %}
 {% block title %}Add books{% endblock %}
+
+{% block styling %}
+    <style>
+        #left {
+            float: left;
+            width:50%;
+        }
+        #right {
+            float: left;
+            width:50%;
+        }
+
+    </style>
+{% endblock %}
+
 {% block content %}
     <h1>This is a page where you can add some books.</h1>
-    <form action="#" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" id="submit" value="submit">Add those books</button>
-    </form>
+    <div id="left">
+        <h4>Add books by key words</h4>
+        <form action="#" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" id="submit" value="by_keys" name="submit">Add those books</button>
+        </form>
+    </div>
+    <div id="right">
+        <h4>Import books from xls file</h4>
+        <form action="#" method="post">
+            {% csrf_token %}
+            <button type="submit" id="submit" value="by_file" name="submit">Import</button>
+        </form>
+    </div>
 {% endblock %}
