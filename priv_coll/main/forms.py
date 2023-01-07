@@ -20,7 +20,7 @@ class AddBooks(forms.Form):
 
 
 class AddNewBook(forms.Form):
-    ISBN = forms.IntegerField(label="ISBN", required=True)
+    ISBN = forms.CharField(label="ISBN", max_length=13, required=True)
     title = forms.CharField(label="title", max_length=270, required=True)
     authors = forms.CharField(label="authors", max_length=110, required=False)
     publishedDate = forms.CharField(label="publishedDate", max_length=10, required=False)

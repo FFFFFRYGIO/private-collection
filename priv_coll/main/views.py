@@ -81,7 +81,7 @@ def edit_book(response):
     if response.method == "POST":
         form = EditBook(response.POST)
         if form.is_valid():
-            result = manage_books.edit_book(9788301180638, response.user, form.cleaned_data)  # TODO: dynamic ISBN
+            result = manage_books.edit_book("9788301180638", response.user, form.cleaned_data)  # TODO: dynamic ISBN
             messages.append(result)
         else:
             messages.append("Form is not valid!")

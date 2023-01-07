@@ -84,7 +84,7 @@ def add_books(book_params: dict, user: str) -> namedtuple:
     return namedtuple("Result", ["errors", "duplicates", "success"])(count_errors, count_duplicates, count_success)
 
 
-def edit_book(book_target_isbn: int, user: str, updated_book: dict) -> str:
+def edit_book(book_target_isbn: str, user: str, updated_book: dict) -> str:
     """execute changes for modified book"""
 
     b = Book.objects.get(ISBN=book_target_isbn, user=user)
