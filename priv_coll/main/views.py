@@ -75,19 +75,19 @@ def new_book(response):
 def edit_book(response, target_isbn):
     """form to edit book chosen from list"""
 
-    messages = []
+    messages = ""
     if not response.user.is_authenticated:
         return redirect("home")
     if response.method == "POST":
         form = EditBook(response.POST)
         if form.is_valid():
-            result = manage_books.edit_book(target_isbn, response.user, form.cleaned_data)  # TODO: dynamic ISBN
-            messages.append(result)
+            result = manage_books.edit_book(target_isbn, response.user, form.cleaned_data)
+            messages += "|" + result
         else:
-            messages.append("Form is not valid!")
-        return redirect("books_list", messages_parsed=messages)  # TODO: make it work
+            messages += "|Form is not valid!"
+        return redirect("books_list", messages_parsed=messages)
     else:
-        b = Book.objects.get(ISBN=target_isbn, user=response.user)  # TODO: dynamic ISBN
+        b = Book.objects.get(ISBN=target_isbn, user=response.user)
         default_data = {
             "title": b.title,
             "authors": b.authors,
@@ -143,7 +143,7 @@ def add_books(response):
                         book_params[i] = form.cleaned_data[i]
                 result = manage_books.add_books(book_params=book_params, user=response.user)
                 if result.success == -1:
-                    messages += "|couldn't find any books in api"
+                    messages += "|Couldn't find any books in api"
                 else:
                     if result.success:
                         messages += "|Adding succesful with " + str(result.success) + " books"
@@ -159,9 +159,9 @@ def add_books(response):
         elif response.POST.get("submit") == "by_file":
             result = manage_books.import_books_from_file(user=response.user)
             if result:
-                messages += "|successfully added %i books" % result
+                messages += "|Successfully imported %i books" % result
             else:
-                messages += "|No books added"
+                messages += "|No books imported"
 
             return redirect("books_list", messages_parsed=messages)  # TODO: make it work
     return render(response, "main/add_books.html", {"form": AddBooks(), "messages": messages})
