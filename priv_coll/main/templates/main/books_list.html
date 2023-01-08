@@ -19,7 +19,13 @@
                     <tr>
                     <th scope="row">{{ book.ISBN }}</th>
                     <td>{{ book.title }}</td>
-                    <td>{{ book.authors }}</td>
+                    <td>
+                        {% if book.authors %}
+                            {{ book.authors }}
+                        {% else %}
+                            (unknown)
+                        {% endif %}
+                    </td>
                     <td>
                         {% if book.publishedDate %}
                             {{ book.publishedDate }}
