@@ -86,6 +86,7 @@ def edit_book(book_target_isbn: str, user: str, updated_book: dict) -> str:
     """execute changes for modified book"""
 
     b = Book.objects.get(ISBN=book_target_isbn, user=user)
+    b_base = b.__dict__.copy()
     b.title = updated_book["title"]
     b.authors = updated_book["authors"]
     b.publishedDate = updated_book["publishedDate"]
@@ -93,6 +94,9 @@ def edit_book(book_target_isbn: str, user: str, updated_book: dict) -> str:
     b.thumbnail = updated_book["thumbnail"]
     b.language = updated_book["language"]
     b.cost = updated_book["cost"]
-    b.save()
 
-    return "successfully edited book"
+    if b.__dict__ == b_base:
+        return "No changes in book"
+    else:
+        b.save()
+        return "Successfully edited book"
