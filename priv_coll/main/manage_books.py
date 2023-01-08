@@ -4,7 +4,7 @@ from .models import Book
 from openpyxl import load_workbook
 
 
-def import_books_from_file(user: str, file: str = "main/source/source.xlsx") -> str:
+def import_books_from_file(user: str, file: str = "main/source/source.xlsx") -> int:
     """add books stored in xls file"""
 
     count_success = 0
@@ -12,7 +12,6 @@ def import_books_from_file(user: str, file: str = "main/source/source.xlsx") -> 
     ws = wb.active
     row = "2"
     while ws["A" + row].value:
-        print(ws["A" + row].value)
         b = Book()
         b.user = user
         b.ISBN = ws["A" + row].value
@@ -27,7 +26,7 @@ def import_books_from_file(user: str, file: str = "main/source/source.xlsx") -> 
             b.save()
             count_success += 1
         row = str(int(row) + 1)
-    return f"successfully added {count_success} books"
+    return count_success
 
 
 def add_books(book_params: dict, user: str) -> namedtuple:
@@ -53,11 +52,10 @@ def add_books(book_params: dict, user: str) -> namedtuple:
         for isbn_elem in vol.get("industryIdentifiers"):
             if isbn_elem.get("type") == "ISBN_13":
                 curr_book.ISBN = isbn_elem.get("identifier")
-        if curr_book.ISBN is None:  # No ISBN code
+        if curr_book.ISBN is None or curr_book.ISBN == "":  # No ISBN code
             count_errors += 1
             continue
-
-        if Book.objects.filter(ISBN=curr_book.ISBN, user=user):  # ISBN already exists
+        if Book.objects.filter(ISBN=curr_book.ISBN, user=user):  # if ISBN already exists
             count_duplicates += 1
             continue
 
@@ -78,8 +76,8 @@ def add_books(book_params: dict, user: str) -> namedtuple:
             curr_book.cost = info.get("saleInfo").get("listPrice").get("amount")
         else:
             curr_book.cost = None
-
         curr_book.save()
+        count_success += 1
 
     return namedtuple("Result", ["errors", "duplicates", "success"])(count_errors, count_duplicates, count_success)
 
@@ -97,4 +95,4 @@ def edit_book(book_target_isbn: str, user: str, updated_book: dict) -> str:
     b.cost = updated_book["cost"]
     b.save()
 
-    return "succesfully edited book"
+    return "successfully edited book"
