@@ -72,7 +72,7 @@ def new_book(response):
     return render(response, "main/new_book.html", {"form": AddNewBook, "messages": messages})
 
 
-def edit_book(response):
+def edit_book(response, target_isbn):
     """form to edit book chosen from list"""
 
     messages = []
@@ -81,14 +81,13 @@ def edit_book(response):
     if response.method == "POST":
         form = EditBook(response.POST)
         if form.is_valid():
-            result = manage_books.edit_book("9788301180638", response.user, form.cleaned_data)  # TODO: dynamic ISBN
+            result = manage_books.edit_book(target_isbn, response.user, form.cleaned_data)  # TODO: dynamic ISBN
             messages.append(result)
         else:
             messages.append("Form is not valid!")
-        return redirect("books_list")
         return redirect("books_list", messages_parsed=messages)  # TODO: make it work
     else:
-        b = Book.objects.get(ISBN="9788301180638", user=response.user)  # TODO: dynamic ISBN
+        b = Book.objects.get(ISBN=target_isbn, user=response.user)  # TODO: dynamic ISBN
         default_data = {
             "title": b.title,
             "authors": b.authors,
@@ -108,7 +107,7 @@ def books_list(response, messages_parsed=None):
 
     if not response.user.is_authenticated:
         return redirect("home")
-    messages = []
+    messages = ""
     if messages_parsed:
         messages += messages_parsed
     if response.method == "POST" and response.POST.get("operation"):
@@ -116,16 +115,15 @@ def books_list(response, messages_parsed=None):
         book_isbn = response.POST.get("operation")[1:]
         if operation == "E":  # Edit
             book = Book.objects.get(ISBN=book_isbn, user=response.user)
-            return redirect("edit_book")
-            return redirect("edit_book", isbn=book.ISBN)  # TODO: make it work
+            return redirect("edit_book", target_isbn=book.ISBN)
         elif operation == "D":  # Delete
             Book.objects.filter(ISBN=book_isbn, user=response.user).delete()
-            messages.append("Book successfully deleted!")
+            messages += "|Book successfully deleted!"
     books = Book.objects.filter(user=response.user).order_by("ISBN")
     return render(
         response,
         "main/books_list.html",
-        {"books_list": books, "attributes_keys": attributes_keys, "messages": messages},
+        {"books_list": books, "attributes_keys": attributes_keys, "messages": messages.split("|")[1:]},
     )
 
 
@@ -134,7 +132,7 @@ def add_books(response):
 
     if not response.user.is_authenticated:
         return redirect("home")
-    messages = []
+    messages = ""
     if response.method == "POST":
         if response.POST.get("submit") == "by_keys":
             form = AddBooks(response.POST)
@@ -144,17 +142,26 @@ def add_books(response):
                     if form.cleaned_data[i]:
                         book_params[i] = form.cleaned_data[i]
                 result = manage_books.add_books(book_params=book_params, user=response.user)
-                messages.append("Adding succesful with " + str(result.success) + " successes") if result.success else 0
-                messages.append("No books added") if result.success == 0 else 0
-                messages.append("Errors with lack of ISBN number: " + str(result.errors)) if result.errors else 0
-                messages.append("Errors with duplicated books: " + str(result.duplicates)) if result.duplicates else 0
-                return redirect("books_list")
+                if result.success == -1:
+                    messages += "|couldn't find any books in api"
+                else:
+                    if result.success:
+                        messages += "|Adding succesful with " + str(result.success) + " books"
+                    if not result.success:
+                        messages += "|No books added"
+                    if result.errors:
+                        messages += "|Errors with lack of ISBN number: " + str(result.errors)
+                    if result.duplicates:
+                        messages += "|Errors with duplicated books: " + str(result.duplicates)
                 return redirect("books_list", messages_parsed=messages)  # TODO: make it work
             else:
-                messages.append("Input is not valid!")
+                messages += "|Input is not valid!"
         elif response.POST.get("submit") == "by_file":
             result = manage_books.import_books_from_file(user=response.user)
-            messages.append(result)
-            return redirect("books_list")
+            if result:
+                messages += "|successfully added %i books" % result
+            else:
+                messages += "|No books added"
+
             return redirect("books_list", messages_parsed=messages)  # TODO: make it work
     return render(response, "main/add_books.html", {"form": AddBooks(), "messages": messages})
