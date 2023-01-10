@@ -23,7 +23,7 @@ def home(response):
     book_count = Book.objects.filter(user=response.user).count()
     book_cost = Book.objects.filter(user=response.user).aggregate(Sum("cost"))["cost__sum"]
     book_cost = book_cost if book_cost else 0.0
-    book_without_cost = Book.objects.filter(user=response.user).exclude(cost__isnull=True).count()
+    book_without_cost = Book.objects.filter(user=response.user).exclude(cost__isnull=False).count()
     days_reading = int(book_count / ((1.75 + 4.1) / 2) * 30 + 0.5)
     months_reading = int(book_count / ((1.75 + 4.1) / 2) + 0.5)
     years_reading = int(book_count / ((1.75 + 4.1) / 2) / 12 + 0.5)
