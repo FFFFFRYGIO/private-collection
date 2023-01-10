@@ -153,7 +153,7 @@ def add_books(response):
                         messages += "|Errors with lack of ISBN number: " + str(result.errors)
                     if result.duplicates:
                         messages += "|Errors with duplicated books: " + str(result.duplicates)
-                return redirect("books_list", messages_parsed=messages)  # TODO: make it work
+                return redirect("books_list", messages_parsed=messages)
             else:
                 messages += "|Input is not valid!"
         elif response.POST.get("submit") == "by_file":
@@ -163,5 +163,5 @@ def add_books(response):
             else:
                 messages += "|No books imported"
 
-            return redirect("books_list", messages_parsed=messages)  # TODO: make it work
+            return redirect("books_list", messages_parsed=messages)
     return render(response, "main/add_books.html", {"form": AddBooks(), "messages": messages})
