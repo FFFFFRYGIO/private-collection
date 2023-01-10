@@ -46,3 +46,30 @@ The page when You can add multiple books with using 2 methods. First is with the
 ### **New book**
 
 The page when You can add a book using the form. The form checks if the input is correct, and if it is then its adding the book to list.
+
+
+## **Mechanism description - what I used here?**
+
+### **Django**
+
+- settings with all needed configuration (among others: database connection, apps)
+- models with tables declaration, and migrations with historic changes in database
+- orm to query database safely
+- views with pages behaviours and application responses
+- forms with input declarations (also using build in forms for logging)
+- urls with redirection specification
+
+### **Pages rendering**
+
+- html - structure of the page, arrangement of contents
+- bootstrap - styling
+- jinja - base templates to proper render of the other pages
+- jinja - printing data parsed to the page
+
+### **Mechanisms underneath**
+
+- api requests to bet books from google api (requests.get module)
+- reading xls file with (openpyxl.load_workbook module)
+- printing messages with results of various operations
+- Http "POST" and "GET" requests manage
+- Named tuples for clearer results parsing (collections.namedtuple module)
